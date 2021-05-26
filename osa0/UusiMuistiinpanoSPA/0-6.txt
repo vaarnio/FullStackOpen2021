@@ -1,0 +1,14 @@
+note over selain:
+Käyttäjä painaa Save-nappulaa, jolloin
+luodaan uusi muistiinpano ja se listään 
+listalle.
+end note
+note over selain:
+JS-koodi piirtää muistiinpanolistan uudelleen
+Sivua ei ladata uudelleen.
+end note
+note over selain:
+JS-tiedostossa määritelty koodi
+lähettää lomakkeen. 
+end note
+selain->palvelin: HTTP POST https://studies.cs.helsinki.fi/exampleapp/new_note_spa

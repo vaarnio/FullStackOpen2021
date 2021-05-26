@@ -1,0 +1,31 @@
+note over selain:
+Käyttäjä painaa 'Save'-nappulaa
+joka saa aikaan HTTP POST -pyynnön.
+Uusi muistiinpano lähetetään palvelimelle.
+end note
+selain->palvelin: HTTP POST https://studies.cs.helsinki.fi/exampleapp/new_note
+note over selain:
+Palvelin vastaan pyyntöön statuskoodilla 302,
+jolloin selain kehottaa tekemään uuden pyynnön
+paikkaan /notes.
+end note
+selain->palvelin: HTTP GET https://studies.cs.helsinki.fi/exampleapp/notes
+palvelin-->selain: notes
+
+selain->palvelin: HTTP GET https://studies.cs.helsinki.fi/exampleapp/main.css
+palvelin-->selain: main.css
+selain->palvelin: HTTP GET https://studies.cs.helsinki.fi/exampleapp/main.js
+palvelin-->selain: main.js
+
+note over selain:
+selain alkaa suorittaa js-koodia
+joka pyytää JSON-datan palvelimelta
+end note
+
+selain->palvelin: HTTP GET https://studies.cs.helsinki.fi/exampleapp/data.json
+palvelin-->selain: main.json
+
+note over selain:
+js-koodi muokkaa sivua sisältämään json-tiedoston
+muistiinpanot käyttäen DOM-rajapintaa.
+end note
