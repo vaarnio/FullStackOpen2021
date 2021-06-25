@@ -12,7 +12,7 @@ const App = () => {
     return (
       <div>
         <GiveFeedback setGood={setGood} setNeutral={setNeutral} setBad={setBad} good={good} neutral={neutral} bad={bad}/>
-        <Statistics good={good} neutral={neutral} bad={bad}/>
+        <Statistics good={good} neutral={neutral} bad={bad} sum={sum}/>
       </div>
     )
   } else {
@@ -28,27 +28,38 @@ const GiveFeedback = (props) => {
   return (
     <div>
       <h1>give feedback</h1>
-      <button onClick={() => props.setGood(props.good + 1)}>good</button>
-      <button onClick={() => props.setNeutral(props.neutral + 1)}>neutral</button>
-      <button onClick={() => props.setBad(props.bad + 1)}>bad</button>
+      <Button setState={props.setGood} text='good' variable={props.good}/>
+      <Button setState={props.setNeutral} text='neutral' variable={props.neutral}/>
+      <Button setState={props.setBad} text='bad' variable={props.bad}/>
     </div>
   )
 }
 
 const Statistics = (props) => {
-  let sum = props.good + props.neutral + props.bad
-  let average = (props.good*1 + props.bad*(-1))/sum
-  let positive = props.good/sum
+  let average = (props.good*1 + props.bad*(-1))/props.sum
+  let positive = props.good/props.sum
   return (
     <div>
       <h1>statistics</h1>
-      <p>good {props.good}<br></br>
-      neutral {props.neutral}<br></br>
-      bad {props.bad}<br></br>
-      all {sum}<br></br>
-      average {average}<br></br>
-      positive {positive*100} %</p>
+      <StatisticsLine text='good' value={props.good}/>
+      <StatisticsLine text='neutral' value={props.neutral}/>
+      <StatisticsLine text='bad' value={props.bad}/>
+      <StatisticsLine text='all' value={props.sum}/>
+      <StatisticsLine text='average' value={average}/>
+      <StatisticsLine text='positive' value={positive}/>
     </div>
+  )
+}
+
+const StatisticsLine = (props) => {
+  return(
+    <p>{props.text} {props.value}</p>
+  )
+}
+
+const Button = (props) => {
+  return(
+    <button onClick={() => props.setState(props.variable + 1)}>{props.text} </button>
   )
 }
 
