@@ -18,7 +18,7 @@ const Content = (props) => {
 const Total = (props) => {
   let sum = 0
   props.parts.forEach(part => {
-    sum = sum + part.excercises
+    sum = sum + part.exercises
   })
 
   return(
