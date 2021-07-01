@@ -68,6 +68,33 @@ const Details = ({data}) => {
         {languages}
       </ul>
       <img src={data.flag} width='100px' alt='flag'/>
+      <Weather city={data.capital}/>
+    </div>
+  )
+}
+
+const Weather = ({city}) => {
+  const url = `http://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&appid=${process.env.REACT_APP_WEATHER_API_KEY}`
+  console.log(url)
+  const [temp, setTemp] = useState(null)
+  const [wind, setWind] = useState(null)
+  const [icon, setIcon] = useState('')
+
+  useEffect(() => {
+    axios
+    .get(url)
+    .then(response => {
+      setTemp(response.data.main.temp)
+      setWind(response.data.wind.speed)
+      setIcon(response.data.weather[0].icon)
+    })
+  }, [])
+  
+  return(
+    <div>
+      <b>temperature: </b> {temp} <br></br>
+      <img src={`https://openweathermap.org/img/wn/${icon}@2x.png`} width='100px' alt='flag'/><br></br>
+      <b>wind: </b> {wind} m/s 
     </div>
   )
 }
