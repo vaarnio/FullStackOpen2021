@@ -1,24 +1,21 @@
 import React, { useEffect, useState } from 'react'
-import axios from 'axios'
+//import axios from 'axios'
+import personService from './services/persons'
 
 const App = () => {
-  const [persons, setPersons] = useState([
-    { name: 'Arto Hellas', number: '040-123456' },
-    { name: 'Ada Lovelace', number: '39-44-5323523' },
-    { name: 'Dan Abramov', number: '12-43-234345' },
-    { name: 'Mary Poppendieck', number: '39-23-6423122' }
-  ])
+  const [persons, setPersons] = useState([])
   const [ newName, setNewName ] = useState('')
   const [ newNumber, setNewNumber] = useState('')
+  const [newPersonAdded, setNewPersonAdded] = useState(false);
   const [filter, setFilter] = useState('')
 
   useEffect(() => {
-    axios
-      .get('http://localhost:3001/persons')
-      .then(response => {
-        setPersons(response.data)
-      })
-  }, [])
+    console.log("getAll effect has run")
+    personService.getAll()
+      .then(initialPersons => {
+      setPersons(initialPersons)
+    })
+  }, [newPersonAdded])
 
   const addPerson = (event) => {
     event.preventDefault()
@@ -29,9 +26,17 @@ const App = () => {
       number: newNumber
     }
 
-    persons.map(person => person.name).includes(newPerson.name)
-      ? alert(`${newPerson.name} is already added to phonebook`)
-      : setPersons(persons.concat(newPerson))
+    if(persons.map(person => person.name).includes(newPerson.name)){
+      alert(`${newPerson.name} is already added to phonebook`)
+    } else {
+      personService
+        .create(newPerson)
+        .then(returnedPerson => {
+          console.log(returnedPerson)
+        })
+    }
+    
+    setNewPersonAdded(!newPersonAdded)
   }
   
   const handleNameChange = (event) => {
@@ -61,7 +66,7 @@ const App = () => {
       <h2>add a new</h2>
       <AddNew {...AddNewProps}/>
       <h2>Numbers</h2>
-      <Persons persons={persons} filter={filter}/>
+      <Persons persons={persons} setPersons={persons} filter={filter}/>
     </div>
   )
 }
@@ -92,6 +97,7 @@ const AddNew = (props) => {
 }
 
 const Persons = ({persons, filter}) => {
+  //console.log(persons)
   const shownPersons = persons.filter(person => 
     person.name.toLowerCase().includes(filter.toLowerCase())
   )
