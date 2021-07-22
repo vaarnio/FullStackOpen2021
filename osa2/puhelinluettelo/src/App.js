@@ -5,16 +5,16 @@ const App = () => {
   const [persons, setPersons] = useState([])
   const [ newName, setNewName ] = useState('')
   const [ newNumber, setNewNumber] = useState('')
-  const [newPersonAdded, setNewPersonAdded] = useState(false);
+  const [RefreshPersons, setRefreshPersons] = useState(false);
   const [filter, setFilter] = useState('')
 
   useEffect(() => {
-    console.log("getAll effect has run")
+    console.log("getAll persons effect has run")
     personService.getAll()
       .then(initialPersons => {
       setPersons(initialPersons)
     })
-  }, [newPersonAdded])
+  }, [RefreshPersons])
 
   const addPerson = (event) => {
     event.preventDefault()
@@ -26,16 +26,33 @@ const App = () => {
     }
 
     if(persons.map(person => person.name).includes(newPerson.name)){
-      alert(`${newPerson.name} is already added to phonebook`)
+      const result = window.confirm(`${newPerson.name} is already added to phonebook, replace the old number with a new one?`)
+      const id = persons.find(person => person.name === newPerson.name).id
+      //console.log(persons)
+      console.log(id)
+      if(result){
+        personService
+        .update(id, newPerson)
+        .then(returnedPerson => {
+          console.log(returnedPerson)
+          setRefreshPersons(!RefreshPersons)
+        })
+      }
     } else {
       personService
         .create(newPerson)
         .then(returnedPerson => {
           console.log(returnedPerson)
         })
+        setRefreshPersons(!RefreshPersons)
     }
-    
-    setNewPersonAdded(!newPersonAdded)
+  }
+
+  const deletePerson = (id) => {
+    console.log('delete button clicked')
+    personService.deleteP(id)
+
+    setRefreshPersons(!RefreshPersons)
   }
   
   const handleNameChange = (event) => {
@@ -65,7 +82,7 @@ const App = () => {
       <h2>add a new</h2>
       <AddNew {...AddNewProps}/>
       <h2>Numbers</h2>
-      <Persons persons={persons} setPersons={persons} filter={filter}/>
+      <Persons persons={persons} setPersons={persons} filter={filter} deletePerson={deletePerson}/>
     </div>
   )
 }
@@ -95,8 +112,17 @@ const AddNew = (props) => {
   )
 }
 
-const Persons = ({persons, filter}) => {
-  //console.log(persons)
+const DeleteId = ({id, deletePerson}) => {
+  return(
+    <div>
+      <button onClick={() => deletePerson(id)}>
+        delete
+      </button>
+    </div>
+  )
+}
+
+const Persons = ({persons, filter, deletePerson}) => {
   const shownPersons = persons.filter(person => 
     person.name.toLowerCase().includes(filter.toLowerCase())
   )
@@ -104,16 +130,17 @@ const Persons = ({persons, filter}) => {
   return(
     <div>
         {shownPersons.map(person => 
-          <Person key={person.name} name={person.name} number={person.number}/>
+          <Person key={person.id} id={person.id} name={person.name} number={person.number} deletePerson={deletePerson}/>
         )}
     </div>
   )
 }
 
-const Person = ({name, number}) => {
+const Person = ({id, name, number, deletePerson}) => {
   return(
-    <div>
-      <p>{name} {number}</p>
+    <div style={{display: "flex",}}>
+      <p>{name} {number} </p>
+      <DeleteId id={id} deletePerson={deletePerson}/>
     </div>
   )
 }

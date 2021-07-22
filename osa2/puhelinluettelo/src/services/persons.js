@@ -13,14 +13,22 @@ const create = newObject => {
     return request
 }
 
+const deleteP = id => {
+    axios.delete(`${baseUrl}/${id}`)
+    console.log(`deleted person with id: ${id}`)
+}
+
 const update = (id, newObject) => {
-    console.log("update")
+    const request = axios.put(`${baseUrl}/${id}`, newObject)
+    console.log(`updated number for person with id: ${id}`)
+    return request
 }
 
 const persons = {
     getAll: getAll,
     create: create,
-    update: update
+    update: update,
+    deleteP: deleteP
 }
 
 export default persons
