@@ -17,8 +17,10 @@ const update = (id, newObject) => {
     console.log("update")
 }
 
-export default {
+const persons = {
     getAll: getAll,
     create: create,
     update: update
 }
+
+export default persons

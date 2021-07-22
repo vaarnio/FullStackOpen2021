@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react'
-//import axios from 'axios'
 import personService from './services/persons'
 
 const App = () => {
