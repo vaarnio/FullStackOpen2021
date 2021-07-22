@@ -1,16 +1,6 @@
 {
   "persons": [
     {
-      "name": "Valtteri Aarnio",
-      "number": "42134124",
-      "id": 1
-    },
-    {
-      "name": "Ilari aarnio",
-      "number": "45524241",
-      "id": 2
-    },
-    {
       "name": "Testimies1",
       "number": "765465345",
       "id": 3

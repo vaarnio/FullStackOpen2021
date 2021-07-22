@@ -11,3 +11,25 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.notification-bad {
+  color: black;
+  border-color: rgb(255, 96, 96);
+  background: lightcoral;
+  font-size: 20px;
+  border-style: solid;
+  border-width: 3px;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+
+.notification-good {
+  color: black;
+  border-color: rgb(114, 255, 96);
+  background: rgb(146, 255, 146);
+  font-size: 20px;
+  border-style: solid;
+  border-width: 3px;
+  padding: 10px;
+  margin-bottom: 10px;
+}

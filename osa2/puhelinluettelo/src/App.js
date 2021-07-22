@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import personService from './services/persons'
+import './index.css'
 
 const App = () => {
   const [persons, setPersons] = useState([])
@@ -7,6 +8,8 @@ const App = () => {
   const [ newNumber, setNewNumber] = useState('')
   const [RefreshPersons, setRefreshPersons] = useState(false);
   const [filter, setFilter] = useState('')
+  const [errorMessage, setErrorMessage] = useState(null)
+  const [isGood, setIsGood] = useState(false)
 
   useEffect(() => {
     console.log("getAll persons effect has run")
@@ -35,7 +38,14 @@ const App = () => {
         .update(id, newPerson)
         .then(returnedPerson => {
           console.log(returnedPerson)
+          setErrorMessage(`Updated ${newPerson.name}`)
+          setIsGood(true)
           setRefreshPersons(!RefreshPersons)
+        })
+        .catch(error => {
+          setErrorMessage(
+            `Information of ${newPerson.name} has already been removed from the server`
+          )
         })
       }
     } else {
@@ -43,14 +53,24 @@ const App = () => {
         .create(newPerson)
         .then(returnedPerson => {
           console.log(returnedPerson)
+          setErrorMessage(`Added ${newPerson.name}`)
+          setIsGood(true)
         })
         setRefreshPersons(!RefreshPersons)
     }
+    setTimeout(() => {
+      setErrorMessage(null)
+    }, 5000)
   }
 
   const deletePerson = (id) => {
     console.log('delete button clicked')
     personService.deleteP(id)
+    setErrorMessage(`Person deleted succesfully`)
+    setIsGood(true)
+    setTimeout(() => {
+      setErrorMessage(null)
+    }, 5000)
 
     setRefreshPersons(!RefreshPersons)
   }
@@ -77,12 +97,25 @@ const App = () => {
 
   return (
     <div>
+      <Notification message={errorMessage} isGood={isGood}/>
       <h2>Phonebook</h2>
       <Filter filter={filter} handleFilterChange={handleFilterChange}/>
       <h2>add a new</h2>
       <AddNew {...AddNewProps}/>
       <h2>Numbers</h2>
       <Persons persons={persons} setPersons={persons} filter={filter} deletePerson={deletePerson}/>
+    </div>
+  )
+}
+
+const Notification = ({message, isGood}) => {
+  if(message === null){
+    return null
+  }
+
+  return(
+    <div className={isGood ? 'notification-good' : 'notification-bad'}>
+      {message}
     </div>
   )
 }
