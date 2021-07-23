@@ -1,3 +1,4 @@
+const { response } = require('express')
 const express = require('express')
 const app = express()
 
@@ -8,12 +9,12 @@ let notes = [
         number: "040-123456"
     },
     {
-        id: 1,
+        id: 2,
         name: "Ada Lovelace",
         number: "39-44-5323523"
     },
     {
-        id: 1,
+        id: 3,
         name: "Dab Abramov",
         number: "12-43-234345"
     },
@@ -30,6 +31,16 @@ app.get('/info', (req, res) => {
 
 app.get('/api/persons', (req, res) => {
     res.json(notes)
+})
+
+app.get('/api/persons/:id', (req, res) => {
+    const id = Number(req.params.id)
+    const note = notes.find(note => note.id === id)
+    if(note) {
+        res.json(note)
+    } else {
+        response.status(404).end()
+    }
 })
   
 const PORT = 3001
