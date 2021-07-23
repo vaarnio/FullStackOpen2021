@@ -23,3 +23,12 @@ let notes = [
         number: "39-23-6423122"
     }   
 ]
+
+app.get('/api/persons', (req, res) => {
+    res.json(notes)
+})
+  
+const PORT = 3001
+app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`)
+})
