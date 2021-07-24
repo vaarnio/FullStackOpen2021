@@ -1,8 +1,9 @@
-const { response } = require('express')
 const express = require('express')
 const app = express()
 
-let notes = [
+app.use(express.json())
+
+let persons = [
     {
         id: 1,
         name: "Arto Hellas",
@@ -26,28 +27,61 @@ let notes = [
 ]
 
 app.get('/info', (req, res) => {
-    res.send(`Phonebook has info for ${notes.length} people<br/><br/>${new Date()}`)
+    res.send(`Phonebook has info for ${persons.length} people<br/><br/>${new Date()}`)
 })
 
 app.get('/api/persons', (req, res) => {
-    res.json(notes)
+    res.json(persons)
 })
 
 app.get('/api/persons/:id', (req, res) => {
     const id = Number(req.params.id)
-    const note = notes.find(note => note.id === id)
-    if(note) {
-        res.json(note)
+    const person = persons.find(person => person.id === id)
+    if(person) {
+        res.json(person)
     } else {
-        response.status(404).end()
+        res.status(404).end()
     }
 })
 
 app.delete('/api/persons/:id', (req, res) => {
     const id = Number(req.params.id)
-    notes = notes.filter(note => note.id !== id)
+    persons = persons.filter(person => person.id !== id)
 
     res.status(204).end()
+})
+
+const getRandomInt = (min, max) => {
+    min = Math.ceil(min)
+    max = Math.floor(max)
+    return Math.floor(Math.random() * (max - min) + min)
+}  
+
+app.post('/api/persons', (req, res) => {
+    //add person to phonebook and generate a random id for them
+    const person = req.body
+    console.log(person)
+
+    if(person.name === undefined || person.number === undefined){
+        res.status(400).json({
+            error: 'person is missing name or phonenumber'
+        })
+    }
+
+    if(persons.map(person => person.name).includes(person.name)){
+        //if person is already in the phonebook
+        res.status(400).json({
+            error: 'the phonebook already contains this name'
+        })
+    }
+
+    const id = getRandomInt(1, 10000)
+    console.log(`Generated a random id for added person: ${id}`)
+    person.id = id
+    console.log(person)
+    
+    persons = persons.concat(person)
+        res.json(person)
 })
   
 const PORT = 3001
