@@ -1,9 +1,13 @@
 const express = require('express')
 const morgan = require('morgan')
 
+morgan.token('res-body', (req, res) => res.resBody)
+
 const app = express()
 app.use(express.json())
-app.use(morgan('tiny'))
+app.use(morgan(':method :url :status :res[content-length] - :response-time ms :res-body'))
+
+
 
 let persons = [
     {
@@ -62,7 +66,7 @@ const getRandomInt = (min, max) => {
 app.post('/api/persons', (req, res) => {
     //add person to phonebook and generate a random id for them
     const person = req.body
-    console.log(person)
+    //console.log(person)
 
     if(person.name === undefined || person.number === undefined){
         res.status(400).json({
@@ -78,12 +82,13 @@ app.post('/api/persons', (req, res) => {
     }
 
     const id = getRandomInt(1, 10000)
-    console.log(`Generated a random id for added person: ${id}`)
+    //console.log(`Generated a random id for added person: ${id}`)
     person.id = id
-    console.log(person)
+    //console.log(person)
     
     persons = persons.concat(person)
-        res.json(person)
+    res.resBody = JSON.stringify(person)
+    res.json(person)
 })
   
 const PORT = 3001
