@@ -1,10 +1,12 @@
+require('dotenv').config()
 const express = require('express')
 const morgan = require('morgan')
 const cors = require('cors')
+const app = express()
+const Person = require('./models/person')
 
 morgan.token('res-body', (req, res) => res.resBody)
 
-const app = express()
 app.use(cors())
 app.use(express.static('build'))
 app.use(express.json())
@@ -40,7 +42,9 @@ app.get('/info', (req, res) => {
 })
 
 app.get('/api/persons', (req, res) => {
-    res.json(persons)
+    Person.find({}).then(persons => {
+        res.json(persons)
+    })
 })
 
 app.get('/api/persons/:id', (req, res) => {
@@ -68,30 +72,18 @@ const getRandomInt = (min, max) => {
 
 app.post('/api/persons', (req, res) => {
     //add person to phonebook and generate a random id for them
-    const person = req.body
-    //console.log(person)
+    const body = req.body
+    console.log(body)
 
-    if(person.name === undefined || person.number === undefined){
-        res.status(400).json({
-            error: 'person is missing name or phonenumber'
-        })
-    }
+    const person = new Person({
+        name: body.name,
+        number: body.number
+    })
 
-    if(persons.map(person => person.name).includes(person.name)){
-        //if person is already in the phonebook
-        res.status(400).json({
-            error: 'the phonebook already contains this name'
-        })
-    }
-
-    const id = getRandomInt(1, 10000)
-    //console.log(`Generated a random id for added person: ${id}`)
-    person.id = id
-    //console.log(person)
-    
-    persons = persons.concat(person)
-    res.resBody = JSON.stringify(person)
-    res.json(person)
+    person.save().then(response => {
+        console.log('added ' + person.name + ' number ' + person.number + ' to phonebook')
+        mongoose.connection.close()
+    })
 })
   
 const PORT = process.env.PORT || 3001
