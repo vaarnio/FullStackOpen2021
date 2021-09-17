@@ -14,7 +14,7 @@ app.use(morgan(':method :url :status :res[content-length] - :response-time ms :r
 
 
 
-let persons = [
+/* let persons = [
     {
         id: 1,
         name: "Arto Hellas",
@@ -35,7 +35,7 @@ let persons = [
         name: "Mary Poppendick",
         number: "39-23-6423122"
     }   
-]
+] */
 
 app.get('/info', (req, res) => {
     res.send(`Phonebook has info for ${persons.length} people<br/><br/>${new Date()}`)
@@ -82,7 +82,6 @@ app.post('/api/persons', (req, res) => {
 
     person.save().then(response => {
         console.log('added ' + person.name + ' number ' + person.number + ' to phonebook')
-        mongoose.connection.close()
     })
 })
   
