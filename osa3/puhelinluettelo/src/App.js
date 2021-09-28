@@ -13,9 +13,9 @@ const App = () => {
 
   useEffect(() => {
     console.log("getAll persons effect has run")
-    personService.getAll()
+     personService.getAll()
       .then(initialPersons => {
-      setPersons(initialPersons)
+        setPersons(initialPersons)
     })
   }, [RefreshPersons])
 
@@ -55,8 +55,13 @@ const App = () => {
           console.log(returnedPerson)
           setErrorMessage(`Added ${newPerson.name}`)
           setIsGood(true)
+          setRefreshPersons(!RefreshPersons)
         })
-        setRefreshPersons(!RefreshPersons)
+        .catch(error => {
+          console.log(error.response.data.error)
+          setErrorMessage(error.response.data.error)
+          setIsGood(false)
+        })
     }
     setTimeout(() => {
       setErrorMessage(null)
