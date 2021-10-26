@@ -53,12 +53,12 @@ const blogs = [
 
 const listWithOneBlog = [
   {
-    "_id": "6177bae50acfcc5f385c1a85",
-    "title": "tähän toimii",
-    "author": "tes12taaja2",
-    "url": "www.tes312ti.testi",
-    "likes": 3,
-    "__v": 0
+    _id: "5a422bc61b54a676234d17fc",
+    title: "Type wars",
+    author: "Robert C. Martin",
+    url: "http://blog.cleancoder.com/uncle-bob/2016/05/01/TypeWars.html",
+    likes: 2,
+    __v: 0
   }
 ]
 
@@ -70,9 +70,9 @@ test('dummy returns one', () => {
 })
 
 describe('total likes', () => {
-  test('when list has only one blog equals total likes one', () => {
+  test('when list has only one blog equals total likes the amount of likes on that post', () => {
     const result = listHelper.totalLikes(listWithOneBlog)
-    expect(result).toBe(3)
+    expect(result).toBe(2)
   })
 
   test('total likes is the sum of all likes when list has mulitiple blogs', () => {
@@ -97,6 +97,33 @@ describe('favourite blog', () => {
         url: "http://www.cs.utexas.edu/~EWD/transcriptions/EWD08xx/EWD808.html",
         likes: 12,
         __v: 0
+      }
+    )
+  })
+})
+
+describe('mostBlogs', () => {
+  test('empty list should return null', () => {
+    const result = listHelper.mostBlogs([])
+    expect(result).toEqual(null)
+  })
+
+  test('list with one blog should return that blog', () => {
+    const result = listHelper.mostBlogs(listWithOneBlog)
+    expect(result).toEqual(
+      {
+        author: listWithOneBlog[0].author,
+        blogs: listWithOneBlog.length
+      }
+    )
+  })
+
+  test('list with multiple blogs should return ', () => {
+    const result = listHelper.mostBlogs(blogs)
+    expect(result).toEqual(
+      {
+        author: "Robert C. Martin",
+        blogs: 3
       }
     )
   })

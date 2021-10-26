@@ -15,6 +15,26 @@ const favouriteBlog = (blogs) => {
     return blogs.reduce(reducer)
 }
 
+const mostBlogs = (blogs) => {
+    if(blogs.length === 0 || blogs === undefined){
+        return null
+    }
+    const authors = []
+    //add authors of blogs to array if they aren't there already, add 1 to their blog count if already there
+    blogs.forEach(b => (authors.map(a => a.author).includes(b.author)
+        ? authors.filter(a => a.author === b.author)[0].blogs += 1
+        : authors.push({
+            author: b.author,
+            blogs: 1
+        })
+    ))
+
+    //list is reduced to one author who has most blogs
+    return authors.reduce(function(prev, next) {
+        return (prev.blogs > next.blogs) ? prev : next
+    })
+}
+
 module.exports = {
-    dummy, totalLikes, favouriteBlog
+    dummy, totalLikes, favouriteBlog, mostBlogs
 }
