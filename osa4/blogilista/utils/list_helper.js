@@ -35,6 +35,25 @@ const mostBlogs = (blogs) => {
     })
 }
 
+const mostLikes = (blogs) => {
+    if(blogs.length === 0 || blogs === undefined){
+        return null
+    }
+    const authors = []
+
+    blogs.forEach(b => (authors.map(a => a.author).includes(b.author)
+        ? authors.filter(a => a.author === b.author)[0].likes += b.likes
+        : authors.push({
+            author: b.author,
+            likes: b.likes
+        })
+    ))
+
+    return authors.reduce(function(prev, next) {
+        return (prev.likes > next.likes) ? prev : next
+    })
+}
+
 module.exports = {
-    dummy, totalLikes, favouriteBlog, mostBlogs
+    dummy, totalLikes, favouriteBlog, mostBlogs, mostLikes
 }

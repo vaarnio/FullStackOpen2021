@@ -128,3 +128,31 @@ describe('mostBlogs', () => {
     )
   })
 })
+
+describe('mostLikes', () => {
+  test('empty list should return null', () => {
+    const result = listHelper.mostLikes([])
+    expect(result).toEqual(null)
+  })
+
+  test('list with one blog should return that blogs blogger and amound of likes on that post', () => {
+    const result = listHelper.mostLikes(listWithOneBlog)
+    expect(result).toEqual(
+      {
+        author: listWithOneBlog[0].author,
+        likes: listWithOneBlog[0].likes
+      }
+    )
+  })
+
+  test('list with multiple blogs should return total amount of likes for the most popular blogger', () => {
+    const result = listHelper.mostLikes(blogs)
+    console.log(result)
+    expect(result).toEqual(
+      {
+        author: "Edsger W. Dijkstra",
+        likes: 17
+      }
+    )
+  })
+})
